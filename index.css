@@ -52,6 +52,10 @@ td[data-wall='true'], td[data-wall-corner='true'] {
 	background-color: #dddddd;
 }
 
+td[data-wall='true'][data-wall-orientation='0011'] {
+	background-color: #555555;
+}
+
 /*cell colors*/
 td[data-wall='false'] {
 	background-color: #ffffff;
