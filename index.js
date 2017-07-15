@@ -1,7 +1,7 @@
 class Tool {
 	init() {
 		console.log(this.name);
-		table.attr("data-tool", this.name);
+		display.table.attr("data-tool", this.name);
 	}
 	get name() {
 		return "tool";
@@ -14,18 +14,22 @@ class EditTool extends Tool {
 	}
 }
 
-var table = $("table");
-for (var i = 0; i < 11; i++) {
-	var row = $("<tr></tr>");
-	for (var j = 0; j < 11; j++) {
-		cell = $("<td></td>");
-		
-		cell.attr("data-wall", isWall(i, j));
-		cell.attr("data-wall-corner", isWallCorner(i, j));
-		
-		row.append(cell);
+class Display {
+	constructor(tableSelector) {
+		this.table = $(tableSelector);
+		for (var i = 0; i < 11; i++) {
+			var row = $("<tr></tr>");
+			for (var j = 0; j < 11; j++) {
+				var cell = $("<td></td>");
+				
+				cell.attr("data-wall", isWall(i, j));
+				cell.attr("data-wall-corner", isWallCorner(i, j));
+				
+				row.append(cell);
+			}
+			this.table.append(row);
+		}
 	}
-	table.append(row);
 }
 
 function isCell(i, j) {
@@ -43,6 +47,7 @@ function isWallCorner(i, j) {
 function switchTool(tool) {
 	tool.init();
 }
+var display = new Display("table");
 
 var editTool = new EditTool();
 switchTool(editTool);
