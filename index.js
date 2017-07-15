@@ -86,9 +86,9 @@ class Map {
 		this.width = width;
 		this.height = height;
 		this.horizontalWalls = [];
-		for (var i = 0; i < height; i++) {
+		for (var i = 0; i <= height; i++) {
 			this.horizontalWalls[i] = [];
-			for (var j = 0; j <= height; j++) {
+			for (var j = 0; j < width; j++) {
 				this.horizontalWalls[i][j] = new Wall(new Direction(Direction.HORIZONTAL), new Orientation("0011"));
 			}
 		}
@@ -141,10 +141,10 @@ class EraseTool extends Tool {
 class Display {
 	constructor(tableSelector) {
 		this.table = $(tableSelector);
-		var map = new Map(10, 10);
-		for (var i = 0; i < map.height; i++) {
+		var map = new Map(8, 5);
+		for (var i = 0; i < map.height * 2; i++) {
 			var row = $("<tr></tr>");
-			for (var j = 0; j < map.width; j++) {
+			for (var j = 0; j < map.width * 2; j++) {
 				var cell = $("<td></td>");
 				
 				cell.attr("data-i", i);
@@ -167,7 +167,7 @@ class Display {
 			this.table.append(row);
 		}
 		var row = $("<tr></tr>");
-		for (var j = 0; j < map.width; j++) {
+		for (var j = 0; j < map.width * 2; j++) {
 			var cell = $("<td></td>");
 			
 			cell.attr("data-i", i);
@@ -188,6 +188,28 @@ class Display {
 		
 		row.append(cell);
 		this.table.append(row);
+		
+		$("td").click(function (ev) {
+			var i = ev.target.dataset.i;
+			var j = ev.target.dataset.j;
+			if (isHorizontalWall(i, j)) {
+				if (ev.target.dataset.wallOrientation == "0011") {
+					ev.target.dataset.wallOrientation = "0000";
+				}
+				else {
+					ev.target.dataset.wallOrientation = "0011";
+				}
+			}
+			else if (isVerticalWall(i, j)) {
+				console.log(ev.target.dataset.wallOrientation);
+				if (ev.target.dataset.wallOrientation == "1100") {
+					ev.target.dataset.wallOrientation = "0000";
+				}
+				else {
+					ev.target.dataset.wallOrientation = "1100";
+				}
+			}
+		});
 	}
 }
 
