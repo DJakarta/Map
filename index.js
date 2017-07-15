@@ -1,7 +1,7 @@
 class Tool {
 	init() {
-		console.log(this.name);
 		display.table.attr("data-tool", this.name);
+		console.log("Switched to " + this.name + ".");
 	}
 	get name() {
 		return "tool";
@@ -11,6 +11,21 @@ class Tool {
 class EditTool extends Tool {
 	get name() {
 		return "editTool";
+	}
+}
+class ScrollTool extends Tool {
+	get name() {
+		return "scrollTool";
+	}
+}
+class PaintTool extends Tool {
+	get name() {
+		return "paintTool";
+	}
+}
+class EraseTool extends Tool {
+	get name() {
+		return "eraseTool";
 	}
 }
 
@@ -50,4 +65,24 @@ function switchTool(tool) {
 var display = new Display("table");
 
 var editTool = new EditTool();
+var scrollTool = new ScrollTool();
+var paintTool = new PaintTool();
+var eraseTool = new EraseTool();
 switchTool(editTool);
+
+function keyHandler(ev) {
+	if (ev.key == "e") {
+		switchTool(editTool);
+	}
+	else if (ev.key == "s") {
+		switchTool(scrollTool);
+	}
+	else if (ev.key == "p") {
+		switchTool(paintTool);
+	}
+	else if (ev.key == "d") {
+		switchTool(eraseTool);
+	}
+}
+
+$(window).keyup(keyHandler);

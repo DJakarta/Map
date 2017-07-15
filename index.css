@@ -30,15 +30,21 @@ td:nth-child(even) {
 	width: 40px;
 }
 
-/*cursors*/
+/*editTool*/
 table[data-tool='editTool'] td[data-wall-corner='false']:hover {
 	cursor: pointer;
 }
 
-/*colors*/
-td[data-wall-corner='false']:hover {
+table[data-tool='editTool'] td[data-wall-corner='false']:hover {
 	filter: brightness(105%);
 	box-shadow: 0px 0px 10px #000000;
+}
+
+/*scrollTool*/
+table[data-tool='scrollTool']:hover {
+	filter: brightness(105%);
+	box-shadow: 0px 0px 10px #000000;
+	cursor: all-scroll;
 }
 
 /*wall colors*/
@@ -49,4 +55,9 @@ td[data-wall='true'], td[data-wall-corner='true'] {
 /*cell colors*/
 td[data-wall='false'] {
 	background-color: #ffffff;
+}
+
+#sidebar {
+	width: 200px;
+	height: 500px;
 }
