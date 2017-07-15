@@ -30,6 +30,11 @@ td:nth-child(even) {
 	width: 40px;
 }
 
+/*cursors*/
+table[data-tool='editTool'] td[data-wall-corner='false']:hover {
+	cursor: pointer;
+}
+
 /*colors*/
 td[data-wall-corner='false']:hover {
 	filter: brightness(105%);

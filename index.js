@@ -1,4 +1,20 @@
-table = $("table");
+class Tool {
+	init() {
+		console.log(this.name);
+		table.attr("data-tool", this.name);
+	}
+	get name() {
+		return "tool";
+	}
+}
+
+class EditTool extends Tool {
+	get name() {
+		return "editTool";
+	}
+}
+
+var table = $("table");
 for (var i = 0; i < 11; i++) {
 	var row = $("<tr></tr>");
 	for (var j = 0; j < 11; j++) {
@@ -23,3 +39,10 @@ function isWall(i, j) {
 function isWallCorner(i, j) {
 	return i % 2 == 0 && j % 2 == 0;
 }
+
+function switchTool(tool) {
+	tool.init();
+}
+
+var editTool = new EditTool();
+switchTool(editTool);
