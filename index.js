@@ -2,6 +2,7 @@
 - Refactor Display
 - Refactor Map
 - Refactor functions from table coordinates to element
+- Make each tool recieve events
 */
 
 class Wall {
@@ -14,6 +15,48 @@ class Wall {
 			throw {"exceptionType" : "unsupportedArguments",
 				"arguments" : arguments};
 		}
+	}
+}
+
+class App {
+	constructor() {
+		this.registerGlobalMouseListener();
+		this.displays = [];
+	}
+	
+	static get DEBUG() {
+		return true;
+	}
+	static log() {
+		if (App.DEBUG) {
+			console.log.apply(this, arguments);
+		}
+	}
+	static warn() {
+		if (App.DEBUG) {
+			console.warn.apply(this, arguments);
+		}
+	}
+	registerGlobalMouseListener() {
+		var app = this;
+		$(window).mouseup(function (ev) {
+			app.sendMouseUpNotification();
+		});
+	}
+	
+	sendMouseUpNotification() {
+		for (var display in this.displays) {
+			this.displays[display].resetMouseDown();
+		}
+	}
+	
+	addDisplay(tableSelector) {
+		var display = new Display(tableSelector);
+		this.displays.push(display);
+	}
+	
+	switchTool(tool) {
+		tool.init(this);
 	}
 }
 
@@ -108,8 +151,10 @@ class Map {
 }
 
 class Tool {
-	init() {
-		display.table.attr("data-tool", this.name);
+	init(app) {
+		for (var display in app.displays) {
+			app.displays[display].table.attr("data-tool", this.name);
+		}
 		console.log("Switched to " + this.name + ".");
 	}
 	get name() {
@@ -141,6 +186,10 @@ class EraseTool extends Tool {
 class Display {
 	constructor(tableSelector) {
 		this.table = $(tableSelector);
+		this.resetMouseDown();
+		this.registerMouseListener();
+		
+		/*test map*/
 		var map = new Map(8, 5);
 		for (var i = 0; i < map.height * 2; i++) {
 			var row = $("<tr></tr>");
@@ -211,6 +260,26 @@ class Display {
 			}
 		});
 	}
+	
+	resetMouseDown() {
+		this.mouseDownOn = false;
+		App.log("Mouse down reset on ", this);
+	}
+	
+	recordMouseDown() {
+		if (this.mouseDownOn) {
+			App.warn("Warning: mouseDown detected when the mouse was already pressed.");
+		}
+		this.mouseDownOn = true;
+		App.log("Mouse down on ", this);
+	}
+	
+	registerMouseListener() {
+		var display = this;
+		this.table.mousedown(function (ev) {
+			display.recordMouseDown();
+		});
+	}
 }
 
 function isCell(i, j) {
@@ -233,16 +302,13 @@ function isWallCorner(i, j) {
 	return i % 2 == 0 && j % 2 == 0;
 }
 
-function switchTool(tool) {
-	tool.init();
-}
-var display = new Display("table");
-
+var app = new App();
+app.addDisplay("table");
 var editTool = new EditTool();
 var scrollTool = new ScrollTool();
 var paintTool = new PaintTool();
 var eraseTool = new EraseTool();
-switchTool(editTool);
+app.switchTool(editTool);
 
 function keyHandler(ev) {
 	if (ev.key == "e") {
@@ -260,3 +326,7 @@ function keyHandler(ev) {
 }
 
 $(window).keyup(keyHandler);
+
+function disable() {
+	return 2;
+}
