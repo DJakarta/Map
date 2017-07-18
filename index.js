@@ -262,8 +262,10 @@ class Display {
 	}
 	
 	resetMouseDown() {
-		this.mouseDownOn = false;
-		App.log("Mouse down reset on ", this);
+		if (this.mouseDownOn) {
+			this.mouseDownOn = false;
+			App.log("Mouse down reset on ", this);
+		}
 	}
 	
 	recordMouseDown() {
